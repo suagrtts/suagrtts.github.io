@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up - Kustomize</title>
+    <link rel="stylesheet" href="homepagestyles.css">
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .error-message {
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .logo img {
+            height: 85px;
+        }
+
+        .password-requirements {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="homepage.html"><img src="logo.png" alt="Kustomize"></a>
+        </div>
+        <nav class="nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="cart.html" class="cart-icon">Cart <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+            <a href="favorites.html" class="favorites-icon">Favorites <i class="fas fa-heart"></i><span class="favorites-count">0</span></a>
+            <a href="login.html">Sign In / Sign Up <i class="fas fa-sign-in-alt"></i></a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <h2 class="text-center">Create Account</h2>
+        <p class="text-center" style="color: #666; margin-bottom: 20px;">Join Kustomize today</p>
+        
+        <div id="signupError" class="error-message"></div>
+        
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required placeholder="Enter your address">
+            </div>
+            <div class="form-group">
+                <label for="birthday">Birthday</label>
+                <input type="date" id="birthday" name="birthday" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Create a password">
+                <p class="password-requirements">Password must be at least 8 characters long</p>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" required placeholder="Confirm your password">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+        <p class="text-center mt-20">
+            Already have an account? <a href="login.html">Login</a>
+        </p>
+    </div>
+
+    <script src="navbarState.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const errorMsg = document.getElementById('signupError');
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validate password
+            if (password.length < 8) {
+                errorMsg.textContent = 'Password must be at least 8 characters long';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                errorMsg.textContent = 'Passwords do not match';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const userProfile = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                birthday: document.getElementById('birthday').value,
+                gender: document.getElementById('gender').value,
+                password: password
+            };
+
+            // Check if email already exists
+            const existingProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (existingProfile && existingProfile.email === userProfile.email) {
+                errorMsg.textContent = 'An account with this email already exists';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Clear any existing login state
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('favorites');
+            localStorage.removeItem('shippingAddress');
+            
+            // Save new profile
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            window.location.replace('login.html');
+        });
+
+        // Update cart and favorites count
+        function updateCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            document.querySelector('.cart-count').textContent = isLoggedIn ? cart.reduce((sum, item) => sum + item.quantity, 0) : '0';
+            document.querySelector('.favorites-count').textContent = isLoggedIn ? favorites.length : '0';
+        }
+
+        // Initialize counts
+        document.addEventListener('DOMContentLoaded', updateCounts);
+    </script>
+</body>
+</html>

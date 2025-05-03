@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="homepagestyles.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-btn:hover {
+            background-color: #e9ecef;
+            transform: translateX(-5px);
+        }
+        .back-btn i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="homepage.html"><img src="logo.png" alt="Kustomize"></a>
+        </div>
+        <nav class="nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="cart.html" class="cart-icon">Cart <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+            <a href="favorites.html" class="favorites-icon">Favorites <i class="fas fa-heart"></i><span class="favorites-count">0</span></a>
+            <a href="profile.html" class="active profile">Profile <i class="fas fa-user"></i></a>
+        </nav>
+    </header>
+
+    <button onclick="history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back
+        </button>
+
+    <div class="profile-card">
+        <div class="profile-left">
+            <div class="profile-picture-container">
+                <img src="default-profile.jpg" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                <div class="profile-picture-overlay" onclick="openPictureUpload()">
+                    Change Picture
+                </div>
+            </div>
+            <div class="profile-picture-actions">
+                <button class="picture-action-btn" onclick="openPictureUpload()">Update Photo</button>
+            </div>
+        </div>
+        
+        <div class="profile-right">
+            <div class="profile-header">
+                <h1>My Profile</h1>
+            </div>
+
+            <div class="profile-name-card">
+                <h2 class="profile-name">John Doe</h2>
+                <p class="profile-role">Shoe Enthusiast</p>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Wishlists</div>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="profile-info-row">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value">john.doe@example.com</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Phone</span>
+                    <span class="profile-value">+1 (555) 123-4567</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Location</span>
+                    <span class="profile-value">New York, USA</span>
+                </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="address-section">
+                <h3 class="section-title">My Addresses</h3>
+                <div class="address-list" id="addressList">
+                    <!-- Addresses will be populated here -->
+                </div>
+                <button class="profile-btn btn-primary" onclick="openAddressModal()">
+                    <i class="fas fa-plus"></i> Add New Address
+                </button>
+            </div>
+
+            <div class="profile-actions">
+                <button class="profile-btn btn-primary" onclick="editProfile()">Edit Profile</button>
+                <button class="profile-btn btn-secondary">Change Password</button>
+                <button class="profile-btn btn-danger">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Picture Upload Modal -->
+    <div class="modal picture-upload-modal" id="pictureUploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile Picture</h3>
+            </div>
+            <div class="picture-upload-area" onclick="triggerFileInput()">
+                <div class="picture-upload-icon">📸</div>
+                <div class="picture-upload-text">Click to upload a new photo</div>
+                <div class="picture-upload-size">Max file size: 5MB</div>
+            </div>
+            <input type="file" id="profilePictureInput" class="profile-picture-upload" accept="image/*">
+            <div class="form-actions">
+                <button class="profile-btn btn-primary" onclick="savePicture()">Save Picture</button>
+                <button class="profile-btn btn-secondary" onclick="closePictureUpload()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div class="modal" id="addressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Address</h3>
+            </div>
+            <form id="addressForm" onsubmit="saveAddress(event)">
+                <div class="form-group">
+                    <label for="addressName">Address Name (e.g., Home, Office)</label>
+                    <input type="text" id="addressName" required>
+                </div>
+                <div class="form-group">
+                    <label for="fullAddress">Full Address</label>
+                    <textarea id="fullAddress" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="province">Province</label>
+                    <input type="text" id="province" required>
+                </div>
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" id="postalCode" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                    <input type="checkbox" id="isDefault">
+                        Set as default address
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="profile-btn btn-primary">Save Address</button>
+                    <button type="button" class="profile-btn btn-secondary" onclick="closeAddressModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+            </div>
+            <form id="editProfileForm" onsubmit="saveProfileChanges(event)">
+                <div class="form-group">
+                    <label for="editFullName">Full Name</label>
+                    <input type="text" id="editFullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone Number</label>
+                    <input type="tel" id="editPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAddress">Address</label>
+                    <input type="text" id="editAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBirthday">Birthday</label>
+                    <input type="date" id="editBirthday" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGender">Gender</label>
+                    <select id="editGender" required>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="profile-btn btn-primary">Save Changes</button>
+                    <button type="button" class="profile-btn btn-secondary" onclick="closeEditProfileModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+            </div>
+            <form id="changePasswordForm" onsubmit="changePassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required minlength="8">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="profile-btn btn-primary">Change Password</button>
+                    <button type="button" class="profile-btn btn-secondary" onclick="closeChangePasswordModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Account</h3>
+            </div>
+            <form id="deleteAccountForm" onsubmit="deleteAccount(event)">
+                <div class="form-group">
+                    <p style="color: #ff4444; margin-bottom: 20px;">Warning: This action cannot be undone. All your data will be permanently deleted.</p>
+                    <label for="deletePassword">Enter your password to confirm</label>
+                    <input type="password" id="deletePassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="profile-btn btn-danger">Delete Account</button>
+                    <button type="button" class="profile-btn btn-secondary" onclick="closeDeleteAccountModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Use the centralized auth system
+        function checkLogin() {
+            return checkLoginState();
+        }
+
+        // Load user profile data
+        function loadUserProfile() {
+            if (!checkLogin()) return;
+            
+        const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+            // Update profile name card
+            document.querySelector('.profile-name').textContent = userProfile.fullName;
+            
+            // Update profile info
+            const profileInfo = document.querySelector('.profile-info');
+            profileInfo.innerHTML = `
+                <div class="profile-info-row">
+                    <span class="profile-label">Full Name</span>
+                    <span class="profile-value">${userProfile.fullName}</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value">${userProfile.email}</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Phone</span>
+                    <span class="profile-value">${userProfile.phone}</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Address</span>
+                    <span class="profile-value">${userProfile.address}</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Birthday</span>
+                    <span class="profile-value">${formatDate(userProfile.birthday)}</span>
+                </div>
+                <div class="profile-info-row">
+                    <span class="profile-label">Gender</span>
+                    <span class="profile-value">${userProfile.gender}</span>
+                </div>
+            `;
+
+            // Load profile picture if exists
+            if (userProfile.profilePicture) {
+                document.getElementById('profilePicture').src = userProfile.profilePicture;
+            }
+
+            // Load addresses
+            loadAddresses();
+        }
+
+        // Format date for better display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Load profile data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkLogin()) {
+                updateCounts();
+                loadUserProfile();
+            }
+        });
+
+        // Picture Upload Functions
+        function openPictureUpload() {
+            document.getElementById('pictureUploadModal').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('pictureUploadModal').classList.add('show');
+            }, 10);
+        }
+
+        function closePictureUpload() {
+            const modal = document.getElementById('pictureUploadModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function triggerFileInput() {
+            document.getElementById('profilePictureInput').click();
+        }
+
+        function savePicture() {
+            const fileInput = document.getElementById('profilePictureInput');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profilePicture = e.target.result;
+                    document.getElementById('profilePicture').src = profilePicture;
+                    
+                    // Save to user profile
+                    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                    userProfile.profilePicture = profilePicture;
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                    
+                    closePictureUpload();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Address Management Functions
+        function openAddressModal() {
+            document.getElementById('addressModal').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('addressModal').classList.add('show');
+            }, 10);
+        }
+
+        function closeAddressModal() {
+            const modal = document.getElementById('addressModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            document.getElementById('addressForm').reset();
+        }
+
+        function saveAddress(event) {
+            event.preventDefault();
+            const addressData = {
+                name: document.getElementById('addressName').value,
+                fullAddress: document.getElementById('fullAddress').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                postalCode: document.getElementById('postalCode').value,
+                isDefault: document.getElementById('isDefault').checked
+            };
+
+            // Get existing addresses
+            let addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+
+            // If this is default, remove default from others
+            if (addressData.isDefault) {
+                addresses = addresses.map(addr => ({...addr, isDefault: false}));
+            }
+
+            // Add new address
+            addresses.push(addressData);
+
+            // Save to localStorage
+            localStorage.setItem('userAddresses', JSON.stringify(addresses));
+
+            // If this is the default address, also save it as shipping address
+            if (addressData.isDefault) {
+                localStorage.setItem('shippingAddress', JSON.stringify(addressData));
+            }
+
+            // Reload addresses
+            loadAddresses();
+
+            // Close modal and reset form
+            closeAddressModal();
+        }
+
+        function loadAddresses() {
+            const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            const addressList = document.getElementById('addressList');
+            addressList.innerHTML = ''; // Clear existing addresses
+            
+            addresses.forEach((address, index) => {
+                const addressCard = createAddressCard(address, index);
+                addressList.appendChild(addressCard);
+            });
+        }
+
+        function createAddressCard(address, index) {
+            const card = document.createElement('div');
+            card.className = 'address-card';
+        card.innerHTML = `
+                <div class="address-header">
+                    <h4>${address.name}</h4>
+                    ${address.isDefault ? '<span class="default-badge">Default</span>' : ''}
+                </div>
+                <div class="address-content">
+                    <p>${address.fullAddress}</p>
+                    <p>${address.city}, ${address.province} ${address.postalCode}</p>
+                </div>
+                <div class="address-actions">
+                    <button class="address-btn edit" onclick="editAddress(${index})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="address-btn delete" onclick="deleteAddress(${index})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    ${!address.isDefault ? `
+                    <button class="address-btn set-default" onclick="setDefaultAddress(${index})">
+                        <i class="fas fa-check"></i> Set as Default
+                    </button>
+                    ` : ''}
+                </div>
+            `;
+            return card;
+        }
+
+        function editAddress(index) {
+            const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            const address = addresses[index];
+            
+            // Populate form
+            document.getElementById('addressName').value = address.name;
+            document.getElementById('fullAddress').value = address.fullAddress;
+            document.getElementById('city').value = address.city;
+            document.getElementById('province').value = address.province;
+            document.getElementById('postalCode').value = address.postalCode;
+            document.getElementById('isDefault').checked = address.isDefault;
+            
+            // Remove old address
+            addresses.splice(index, 1);
+            localStorage.setItem('userAddresses', JSON.stringify(addresses));
+            
+            // Open modal
+            openAddressModal();
+        }
+
+        function deleteAddress(index) {
+            if (confirm('Are you sure you want to delete this address?')) {
+                const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+                const deletedAddress = addresses[index];
+                
+                // Remove address
+                addresses.splice(index, 1);
+                localStorage.setItem('userAddresses', JSON.stringify(addresses));
+                
+                // If deleted address was default, clear shipping address
+                if (deletedAddress.isDefault) {
+                    localStorage.removeItem('shippingAddress');
+                }
+                
+                // Reload addresses
+                loadAddresses();
+            }
+        }
+
+        function setDefaultAddress(index) {
+            const addresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            
+            // Remove default from all addresses
+            addresses.forEach(addr => addr.isDefault = false);
+            
+            // Set new default
+            addresses[index].isDefault = true;
+            
+            // Save changes
+            localStorage.setItem('userAddresses', JSON.stringify(addresses));
+            
+            // Update shipping address
+            localStorage.setItem('shippingAddress', JSON.stringify(addresses[index]));
+            
+            // Reload addresses
+            loadAddresses();
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const pictureModal = document.getElementById('pictureUploadModal');
+            const addressModal = document.getElementById('addressModal');
+            const editProfileModal = document.getElementById('editProfileModal');
+            const changePasswordModal = document.getElementById('changePasswordModal');
+            const deleteAccountModal = document.getElementById('deleteAccountModal');
+
+            if (event.target === pictureModal) {
+                closePictureUpload();
+            }
+            if (event.target === addressModal) {
+                closeAddressModal();
+            }
+            if (event.target === editProfileModal) {
+                closeEditProfileModal();
+            }
+            if (event.target === changePasswordModal) {
+                closeChangePasswordModal();
+            }
+            if (event.target === deleteAccountModal) {
+                closeDeleteAccountModal();
+            }
+        }
+
+        // Edit Profile Function
+        function editProfile() {
+            const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (userProfile) {
+                // Populate form with current data
+                document.getElementById('editFullName').value = userProfile.fullName;
+                document.getElementById('editEmail').value = userProfile.email;
+                document.getElementById('editPhone').value = userProfile.phone;
+                document.getElementById('editAddress').value = userProfile.address;
+                document.getElementById('editBirthday').value = userProfile.birthday;
+                document.getElementById('editGender').value = userProfile.gender;
+                
+                // Show edit modal
+                document.getElementById('editProfileModal').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('editProfileModal').classList.add('show');
+                }, 10);
+            }
+        }
+
+        function saveProfileChanges(event) {
+            event.preventDefault();
+            const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+            
+            // Update profile data
+            userProfile.fullName = document.getElementById('editFullName').value;
+            userProfile.email = document.getElementById('editEmail').value;
+            userProfile.phone = document.getElementById('editPhone').value;
+            userProfile.address = document.getElementById('editAddress').value;
+            userProfile.birthday = document.getElementById('editBirthday').value;
+            userProfile.gender = document.getElementById('editGender').value;
+
+            // Save updated profile
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+            // Reload profile display
+            loadUserProfile();
+
+            // Close modal
+            closeEditProfileModal();
+        }
+
+        function closeEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Update cart and favorites count
+        function updateCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            document.querySelector('.cart-count').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.favorites-count').textContent = favorites.length;
+        }
+
+        // Change Password Functions
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('changePasswordModal').classList.add('show');
+            }, 10);
+        }
+
+        function closeChangePasswordModal() {
+            const modal = document.getElementById('changePasswordModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('changePasswordForm').reset();
+            }, 300);
+        }
+
+        function changePassword(event) {
+            event.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Get stored password
+            const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            const storedPassword = userProfile.password;
+
+            if (!storedPassword || currentPassword !== storedPassword) {
+                alert('Current password is incorrect');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                alert('New password must be at least 8 characters long');
+                return;
+            }
+
+            // Update password
+            userProfile.password = newPassword;
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            
+            alert('Password changed successfully');
+            closeChangePasswordModal();
+        }
+
+        // Delete Account Functions
+        function openDeleteAccountModal() {
+            document.getElementById('deleteAccountModal').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('deleteAccountModal').classList.add('show');
+            }, 10);
+        }
+
+        function closeDeleteAccountModal() {
+            const modal = document.getElementById('deleteAccountModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('deleteAccountForm').reset();
+            }, 300);
+        }
+
+        function deleteAccount(event) {
+            event.preventDefault();
+            const password = document.getElementById('deletePassword').value;
+            
+            const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            const storedPassword = userProfile.password;
+
+            if (!storedPassword || password !== storedPassword) {
+                alert('Incorrect password');
+                return;
+            }
+
+            if (confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+                localStorage.clear(); // Clear all localStorage data
+                window.location.replace('login.html');
+            }
+        }
+
+        // Add logout function
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.replace('login.html');
+        }
+
+        // Update event listeners for the buttons
+        document.querySelector('button.btn-secondary').onclick = openChangePasswordModal;
+        document.querySelector('button.btn-danger').onclick = openDeleteAccountModal;
+    </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorite Shoes</title>
+    <link rel="stylesheet" href="homepagestyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .favorites-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .favorites-title {
+            font-size: 2em;
+            color: #222;
+        }
+        .favorites-count {
+            color: #666;
+            font-size: 1.1em;
+        }
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .favorite-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .favorite-card:hover {
+            transform: translateY(-5px);
+        }
+        .favorite-image {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+        }
+        .favorite-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .favorite-info {
+            padding: 20px;
+        }
+        .favorite-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .favorite-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .favorite-price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 15px;
+        }
+        .favorite-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .view-btn, .remove-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .view-btn {
+            background: #111;
+            color: white;
+        }
+        .view-btn:hover {
+            background: #000;
+        }
+        .remove-btn {
+            background: white;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        .remove-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+        .empty-favorites {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+        .empty-favorites i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        .empty-favorites p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .shop-now-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #111;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .shop-now-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        .notification.success { background-color: #4CAF50; }
+        .notification.error { background-color: #f44336; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-btn:hover {
+            background-color: #e9ecef;
+            transform: translateX(-5px);
+        }
+        .back-btn i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="homepage.html"><img src="logo.png" alt="Kustomize"></a>
+        </div>
+        <nav class="nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="cart.html" class="cart-icon">Cart <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+            <a href="favorites.html" class="active favorites-icon">Favorites <i class="fas fa-heart"></i><span class="favorites-count">0</span></a>
+            <a href="profile.html">Profile <i class="fas fa-user"></i></a>
+        </nav>
+    </header>
+
+    <button onclick="history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back
+    </button>
+
+    <div id="notification" class="notification"></div>
+
+    <div class="favorites-container">
+        <div class="favorites-header">
+            <h1 class="favorites-title">My Favorite Shoes</h1>
+            <div class="favorites-count">0 items</div>
+        </div>
+        <div id="favoritesGrid" class="favorites-grid">
+            <!-- Favorites will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script src="productfunctions.js"></script>
+    <script src="navbarState.js"></script>
+    <script>
+        // Update counts function
+        function updateCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            document.querySelector('.cart-count').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.favorites-count').textContent = favorites.length;
+        }
+
+        // Generate slug from product name
+        function generateSlug(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        // Add to favorites
+        function addToFavorites(product) {
+            let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const index = favorites.findIndex(item => item.id === product.id);
+            
+            if (index === -1) {
+                // Add full product data to favorites
+                const productData = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    brand: product.brand,
+                    style: product.style,
+                    slug: generateSlug(product.name)
+                };
+                favorites.push(productData);
+                showNotification('Added to favorites!', 'success');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateCounts();
+            loadFavorites();
+        }
+
+        // Load and display favorites
+        function loadFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            const favoritesCount = document.querySelector('.favorites-count');
+            
+            favoritesCount.textContent = `${favorites.length} item${favorites.length !== 1 ? 's' : ''}`;
+
+            if (favorites.length === 0) {
+                favoritesGrid.innerHTML = `
+                    <div class="empty-favorites">
+                        <i class="fas fa-heart-broken"></i>
+                        <p>No favorite shoes yet</p>
+                        <a href="homepage.html" class="shop-now-btn">Shop Now</a>
+                    </div>
+                `;
+                return;
+            }
+
+            favoritesGrid.innerHTML = favorites.map(item => `
+                <div class="favorite-card" data-id="${item.id}">
+                    <div class="favorite-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="favorite-info">
+                        <div class="favorite-name">${item.name}</div>
+                        <div class="favorite-meta">
+                            ${item.brand ? `Brand: ${item.brand} | ` : ''}
+                            Style: ${item.style || 'Classic'}
+                        </div>
+                        <div class="favorite-price">₱${parseInt(item.price).toLocaleString('en-PH', {minimumFractionDigits:2})}</div>
+                        <div class="favorite-actions">
+                            <button class="view-btn" onclick="viewProduct('${item.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="remove-btn" onclick="removeFavorite('${item.id}')">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // View product details
+        function viewProduct(productId) {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const product = favorites.find(item => item.id === productId);
+            if (product) {
+                const slug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                window.location.href = `product_pages/${slug}.html`;
+            } else {
+                showNotification('Product not found', 'error');
+            }
+        }
+
+        // Remove from favorites
+        function removeFavorite(productId) {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const updatedFavorites = favorites.filter(item => item.id !== productId);
+            localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+            
+            showNotification('Removed from favorites!', 'success');
+            loadFavorites();
+            updateCounts();
+        }
+
+        // Check if product is in favorites
+        function isInFavorites(productId) {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            return favorites.some(item => item.id === productId);
+        }
+
+        // Toggle favorite status
+        function toggleFavorite(product) {
+            let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const index = favorites.findIndex(item => item.id === product.id);
+            
+            if (index === -1) {
+                // Add full product data to favorites
+                const productData = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    brand: product.brand,
+                    style: product.style
+                };
+                favorites.push(productData);
+                showNotification('Added to favorites!', 'success');
+            } else {
+                favorites.splice(index, 1);
+                showNotification('Removed from favorites!', 'success');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateCounts();
+            loadFavorites();
+        }
+
+        // Notification system
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFavorites();
+            updateCounts();
+        });
+    </script>
+</body>
+</html> 

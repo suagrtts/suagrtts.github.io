@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="homepagestyles.css">
+    <link rel="stylesheet" href="cartstyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cart-icon, .favorites-icon {
+            position: relative;
+        }
+        .cart-count, .favorites-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-btn:hover {
+            background-color: #e9ecef;
+            transform: translateX(-5px);
+        }
+        .back-btn i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="homepage.html"><img src="logo.png" alt="Kustomize"></a>
+        </div>
+        <nav class="nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="cart.html" class="active cart-icon">Cart <i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+            <a href="favorites.html" class="favorites-icon">Favorites <i class="fas fa-heart"></i><span class="favorites-count">0</span></a>
+            <a href="profile.html">Profile <i class="fas fa-user"></i></a>
+        </nav>
+    </header>
+
+    <button onclick="history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back
+    </button>
+
+    <div class="cart-container">
+        <h1>Your Cart</h1>
+        <div id="cart-items"></div>
+        <div class="cart-total" id="cart-total">Total: ₱0</div>
+        <button class="checkout-btn" onclick="showPaymentForm()">Proceed to Checkout</button>
+
+        <!-- Payment Form -->
+        <div id="payment-section" style="display: none;">
+            <h2>Payment Method</h2>
+            <form id="payment-form" class="payment-form">
+                <input type="text" id="card-name" placeholder="Name on Card" required>
+                <input type="text" id="card-number" placeholder="Card Number (16 digits)" required>
+                <input type="text" id="expiry-date" placeholder="Expiry Date (MM/YY)" required>
+                <input type="text" id="cvv" placeholder="CVV (3 digits)" required>
+                <button type="button" class="checkout-btn" onclick="validatePayment()">Submit Payment</button>
+            </form>
+            <div id="error-message" class="error-message">Please fill in all fields correctly.</div>
+        </div>
+
+        <!-- Success Message UI -->
+        <div id="success-message" class="success-message">
+            <h2>Thank you for your purchase!</h2>
+            <p>Your order has been successfully processed. You will be redirected to the homepage shortly.</p>
+        </div>
+    </div>
+
+    <script src="cartfunctions.js"></script>
+    <script src="cartprofile.js"></script>
+    <script src="navbarState.js"></script>
+    <script>
+        // Update cart and favorites count
+        function updateCounts() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = cartCount;
+            document.querySelector('.favorites-count').textContent = favorites.length;
+            
+            // Update total items and price
+            updateTotalItems();
+            updateTotalPrice();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            updateCounts();
+        });
+    </script>
+</body>
+</html>

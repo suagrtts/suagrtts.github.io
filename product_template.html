@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Name - Nike Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="homepage.html">
+                    <img src="nike-logo.png" alt="Nike Logo">
+                </a>
+            </div>
+            <nav class="desktop-nav">
+                <a href="homepage.html">Home</a>
+                <a href="cart.html">Cart 🛒</a>
+                <a href="profile.html">Profile 👤</a>
+            </nav>
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="homepage.html">Home</a>
+            <a href="cart.html">Cart 🛒</a>
+            <a href="profile.html">Profile 👤</a>
+        </div>
+    </header>
+
+    <main class="product-page">
+        <div class="product-container">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="" alt="" id="productImage">
+                </div>
+                <div class="thumbnail-container">
+                    <!-- Thumbnails will be added dynamically -->
+                </div>
+            </div>
+            <div class="product-details">
+                <h1 id="productName"></h1>
+                <div class="price-container">
+                    <span class="current-price" id="currentPrice"></span>
+                    <span class="original-price" id="originalPrice"></span>
+                    <span class="discount" id="discount"></span>
+                </div>
+                <div class="product-meta">
+                    <span class="brand" id="productBrand"></span>
+                    <span class="style" id="productStyle"></span>
+                </div>
+                <p class="description" id="productDescription"></p>
+                <div class="size-selector">
+                    <h3>Select Size</h3>
+                    <div class="size-options" id="sizeOptions">
+                        <!-- Size options will be added dynamically -->
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart" id="addToCart">Add to Cart</button>
+                    <button class="wishlist" id="addToWishlist">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Nike Store - Your destination for premium athletic footwear and apparel.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: support@nikestore.com</p>
+                <p>Phone: +63 2 8888 8888</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Nike Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="productfunctions.js"></script>
+</body>
+</html> 
